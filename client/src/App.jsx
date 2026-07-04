@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import Header from "./components/Header";
+import Hero from "./components/Hero";
 import URLForm from "./components/URLForm";
 import Loading from "./components/Loading";
 import EmptyState from "./components/EmptyState";
@@ -12,7 +13,6 @@ import DownloadPDF from "./components/DownloadPDF";
 import Footer from "./components/Footer";
 
 function App() {
-
   const [websiteData, setWebsiteData] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -21,13 +21,20 @@ function App() {
   };
 
   return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100">
 
-    <div className="min-h-screen bg-slate-100">
-
+      {/* Header */}
       <Header />
 
-      <div className="max-w-6xl mx-auto p-8">
+      {/* Hero Section */}
+      <div className="max-w-7xl mx-auto px-6 pt-8">
+        <Hero />
+      </div>
 
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-6 py-8">
+
+        {/* URL Form */}
         <URLForm
           setWebsiteData={setWebsiteData}
           websiteData={websiteData}
@@ -36,40 +43,36 @@ function App() {
           resetAnalysis={resetAnalysis}
         />
 
-        {/* Loading Screen */}
+        {/* Loading */}
         {loading && <Loading />}
 
         {/* Empty State */}
         {!loading && !websiteData && <EmptyState />}
 
-        {/* Hidden PDF Button */}
+        {/* Hidden PDF Generator */}
         <DownloadPDF />
 
         {/* Analysis Report */}
         {websiteData && websiteData.audit && (
-
-          <div id="report">
-
+          <div
+            id="report"
+            className="space-y-8 mt-10 animate-fade-in"
+          >
             <ScoreCards audit={websiteData.audit} />
 
-            <WebsiteInfo data={websiteData} />
+            <WebsiteInfo data={websiteData.website || websiteData} />
 
             <ComparisonCard audit={websiteData.audit} />
 
             <AuditCard audit={websiteData.audit} />
-
           </div>
-
         )}
-
       </div>
 
+      {/* Footer */}
       <Footer />
-
     </div>
-
   );
-
 }
 
 export default App;
