@@ -13,7 +13,8 @@ function DownloadPDF() {
 
       const dataUrl = await toPng(report, {
         cacheBust: true,
-        pixelRatio: 2,
+        pixelRatio: 3,
+        backgroundColor: "#ffffff",
       });
 
       const pdf = new jsPDF("p", "mm", "a4");
@@ -31,17 +32,21 @@ function DownloadPDF() {
         let heightLeft = imgHeight;
         let position = 0;
 
+        // First page
         pdf.addImage(
           dataUrl,
           "PNG",
           0,
           position,
           imgWidth,
-          imgHeight
+          imgHeight,
+          "",
+          "FAST"
         );
 
         heightLeft -= pageHeight;
 
+        // Additional pages
         while (heightLeft > 0) {
           position = heightLeft - imgHeight;
 
@@ -53,17 +58,42 @@ function DownloadPDF() {
             0,
             position,
             imgWidth,
-            imgHeight
+            imgHeight,
+            "",
+            "FAST"
           );
 
           heightLeft -= pageHeight;
+        }
+
+        // Footer with page numbers
+        const pages = pdf.getNumberOfPages();
+
+        for (let i = 1; i <= pages; i++) {
+          pdf.setPage(i);
+
+          pdf.setFontSize(10);
+
+          pdf.setTextColor(120);
+
+          pdf.text(
+            `Shopify CRO Opportunity Engine`,
+            14,
+            290
+          );
+
+          pdf.text(
+            `Page ${i} of ${pages}`,
+            175,
+            290
+          );
         }
 
         pdf.save("Shopify-CRO-Audit.pdf");
       };
     } catch (err) {
       console.error(err);
-      alert(err.message);
+      alert("Unable to generate PDF.");
     }
   };
 
