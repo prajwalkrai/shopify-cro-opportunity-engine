@@ -1,42 +1,29 @@
-const { chromium } = require("playwright");
+const axios = require("axios");
+const cheerio = require("cheerio");
 
 async function scrapeWebsite(url) {
-  const browser = await chromium.launch({
-    headless: true,
-  });
+  console.log("Scraping:", url);
 
-  const context = await browser.newContext({
-    userAgent:
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
-    viewport: {
-      width: 1366,
-      height: 768,
+  const { data } = await axios.get(url, {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36",
     },
+    timeout: 30000,
   });
 
-  const page = await context.newPage();
+  const $ = cheerio.load(data);
 
-  console.log("Opening:", url);
-
-  await page.goto(url, {
-    waitUntil: "domcontentloaded",
-    timeout: 60000,
-  });
-
-  await page.waitForTimeout(5000);
-
-  const title = await page.title();
+  const title = $("title").text().trim();
 
   const description =
-    (await page.locator('meta[name="description"]').getAttribute("content")) || "";
+    $('meta[name="description"]').attr("content") || "";
 
-  const h1 = await page.locator("h1").first().textContent().catch(() => "");
+  const h1 = $("h1").first().text().trim();
 
-  const totalImages = await page.locator("img").count();
+  const totalImages = $("img").length;
 
-  const totalButtons = await page.locator("button").count();
-
-  await browser.close();
+  const totalButtons = $("button").length;
 
   return {
     title,
