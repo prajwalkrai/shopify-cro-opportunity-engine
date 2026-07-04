@@ -5,38 +5,65 @@ const scrapeWebsite = require("../services/scraper");
 const generateAudit = require("../services/gemini");
 
 router.post("/", async (req, res) => {
+  console.log("========================================");
+  console.log("🚀 New Audit Request");
+  console.log("========================================");
+
   try {
     const { url, competitor } = req.body;
 
-    console.log("========== NEW REQUEST ==========");
     console.log("Main Store:", url);
+    console.log("Competitor:", competitor || "None");
 
+    // Step 1
     console.log("Step 1: Scraping main website...");
     const website = await scrapeWebsite(url);
-    console.log("✅ Main website scraped");
+    console.log("✅ Main website scraped successfully.");
 
     let competitorWebsite = null;
 
+    // Step 2
     if (competitor && competitor.trim() !== "") {
-      console.log("Step 2: Scraping competitor...");
+      console.log("Step 2: Scraping competitor website...");
       competitorWebsite = await scrapeWebsite(competitor);
-      console.log("✅ Competitor scraped");
+      console.log("✅ Competitor website scraped successfully.");
+    } else {
+      console.log("Step 2: No competitor provided.");
     }
 
-    console.log("Step 3: Generating Gemini audit...");
+    // Step 3
+    console.log("Step 3: Generating Gemini CRO audit...");
     const audit = await generateAudit(website, competitorWebsite);
-    console.log("✅ Gemini completed");
+    console.log("✅ Gemini audit generated successfully.");
 
-    res.json({
+    console.log("✅ Sending response to frontend.");
+
+    return res.json({
       website,
       competitorWebsite,
       audit,
     });
+
   } catch (err) {
-    console.error("FULL ERROR:");
+
+    console.log("========================================");
+    console.log("❌ AUDIT FAILED");
+    console.log("========================================");
+
+    console.error("Error Name:");
+    console.error(err.name);
+
+    console.error("Error Message:");
+    console.error(err.message);
+
+    console.error("Complete Error:");
     console.error(err);
 
-    res.status(500).json({
+    console.error("Stack Trace:");
+    console.error(err.stack);
+
+    return res.status(500).json({
+      success: false,
       error: err.message,
     });
   }
