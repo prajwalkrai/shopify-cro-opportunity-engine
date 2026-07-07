@@ -1,5 +1,15 @@
-function AuditCard({ audit }) {
+import { motion } from "framer-motion";
+import {
+  Brain,
+  TrendingUp,
+  Target,
+  Settings,
+  FlaskConical,
+  BadgeCheck,
+  Medal,
+} from "lucide-react";
 
+function AuditCard({ audit }) {
   if (!audit) return null;
 
   const badgeColor = (impact) => {
@@ -24,146 +34,263 @@ function AuditCard({ audit }) {
     }
   };
 
-  const priorityMedal = (index) => {
+  const priorityLabel = (index) => {
     switch (index) {
       case 0:
-        return "🥇 Priority #1";
+        return "Highest Priority";
       case 1:
-        return "🥈 Priority #2";
+        return "High Priority";
       case 2:
-        return "🥉 Priority #3";
+        return "Medium Priority";
       default:
-        return `📌 Priority #${index + 1}`;
+        return `Opportunity ${index + 1}`;
     }
   };
 
   return (
+    <div className="mt-12">
 
-    <div className="mt-10">
+      {/* Header */}
 
-      <h2 className="text-3xl font-bold">
-        🧠 AI CRO Audit
-      </h2>
+      <motion.div
+        initial={{ opacity: 0, y: -25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="bg-gradient-to-r from-indigo-700 via-blue-700 to-cyan-600 rounded-3xl p-8 text-white shadow-xl"
+      >
+        <div className="flex items-center gap-4">
 
-      {/* Summary */}
+          <Brain size={42} />
 
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6 mt-6 mb-8">
+          <div>
 
-        <h3 className="text-xl font-bold text-blue-700 mb-3">
-          📋 Executive Summary
-        </h3>
+            <h2 className="text-4xl font-extrabold">
+              AI CRO Audit Report
+            </h2>
 
-        <p className="text-gray-700 leading-8">
+            <p className="text-blue-100 mt-2">
+              AI-generated recommendations prioritized by business impact.
+            </p>
+
+          </div>
+
+        </div>
+      </motion.div>
+
+      {/* Executive Summary */}
+
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.15, duration: 0.6 }}
+        className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-3xl p-8 mt-8 shadow"
+      >
+
+        <div className="flex items-center gap-3 mb-4">
+
+          <BadgeCheck
+            size={28}
+            className="text-blue-600"
+          />
+
+          <h3 className="text-2xl font-bold text-blue-700">
+            Executive Summary
+          </h3>
+
+        </div>
+
+        <p className="text-gray-700 leading-8 text-lg">
           {audit.summary}
         </p>
 
-      </div>
+      </motion.div>
 
-      <div className="grid gap-6">
+      {/* Opportunities */}
+
+      <div className="grid gap-8 mt-10">
 
         {audit.opportunities.map((item, index) => (
 
-          <div
+          <motion.div
             key={index}
-            className="bg-white rounded-2xl shadow-lg border border-gray-200 p-7 hover:shadow-xl transition"
+            initial={{
+              opacity: 0,
+              y: 40,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{ once: true }}
+            transition={{
+              delay: index * 0.15,
+              duration: 0.5,
+            }}
+            whileHover={{
+              y: -10,
+              scale: 1.02,
+            }}
+            className="bg-white rounded-3xl shadow-xl border border-slate-200"
           >
 
-            {/* Top */}
+            {/* Card Header */}
 
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+            <div className="bg-slate-50 border-b p-6 rounded-t-3xl">
 
-              <div>
+              <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-4">
 
-                <p className="text-blue-600 font-semibold">
-                  {priorityMedal(index)}
-                </p>
+                <div>
 
-                <h3 className="text-2xl font-bold mt-2">
-                  {item.title}
-                </h3>
+                  <div className="flex items-center gap-2 mb-3">
+
+                    <Medal
+                      size={20}
+                      className="text-yellow-500"
+                    />
+
+                    <span className="text-blue-700 font-semibold">
+                      {priorityLabel(index)}
+                    </span>
+
+                  </div>
+
+                  <h3 className="text-3xl font-bold text-slate-800">
+                    {item.title}
+                  </h3>
+
+                </div>
+
+                <span
+                  className={`px-5 py-3 rounded-full font-bold ${badgeColor(
+                    item.impact
+                  )}`}
+                >
+                  {item.impact} Impact
+                </span>
 
               </div>
 
-              <span
-                className={`px-5 py-2 rounded-full font-semibold ${badgeColor(item.impact)}`}
+            </div>
+
+            {/* Body */}
+
+            <div className="p-8">
+
+              <div className="grid lg:grid-cols-2 gap-8">
+
+                <div className="space-y-6">
+
+                  <div>
+
+                    <div className="flex items-center gap-2 mb-3">
+
+                      <Target
+                        size={20}
+                        className="text-blue-600"
+                      />
+
+                      <span className="font-semibold">
+                        AI Confidence
+                      </span>
+
+                    </div>
+
+                    <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-bold">
+                      {item.confidence}
+                    </span>
+
+                  </div>
+
+                  <div>
+
+                    <div className="flex items-center gap-2 mb-3">
+
+                      <Settings
+                        size={20}
+                        className="text-green-600"
+                      />
+
+                      <span className="font-semibold">
+                        Implementation Effort
+                      </span>
+
+                    </div>
+
+                    <span
+                      className={`px-4 py-2 rounded-full font-bold ${effortColor(
+                        item.effort
+                      )}`}
+                    >
+                      {item.effort}
+                    </span>
+
+                  </div>
+
+                </div>
+
+                <div>
+
+                  <div className="flex items-center gap-2 mb-4">
+
+                    <TrendingUp
+                      size={22}
+                      className="text-indigo-600"
+                    />
+
+                    <h4 className="font-bold text-xl">
+                      Why This Matters
+                    </h4>
+
+                  </div>
+
+                  <p className="text-gray-700 leading-8">
+                    {item.reason}
+                  </p>
+
+                </div>
+
+              </div>
+
+              {/* Experiment */}
+
+              <motion.div
+                whileHover={{
+                  scale: 1.02,
+                }}
+                className="mt-8 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6"
               >
-                📈 {item.impact} Impact
-              </span>
 
-            </div>
+                <div className="flex items-center gap-3 mb-3">
 
-            {/* Stats */}
+                  <FlaskConical
+                    size={24}
+                    className="text-green-700"
+                  />
 
-            <div className="grid md:grid-cols-2 gap-6 mt-8">
-
-              <div className="space-y-4">
-
-                <div>
-
-                  <span className="font-semibold">
-                    🎯 Confidence
-                  </span>
-
-                  <div className="mt-2 bg-blue-100 text-blue-700 inline-block px-4 py-2 rounded-full font-semibold">
-                    {item.confidence}
-                  </div>
+                  <h4 className="text-xl font-bold text-green-700">
+                    Recommended Experiment
+                  </h4>
 
                 </div>
 
-                <div>
-
-                  <span className="font-semibold">
-                    ⚙ Implementation Effort
-                  </span>
-
-                  <div
-                    className={`mt-2 inline-block px-4 py-2 rounded-full font-semibold ${effortColor(item.effort)}`}
-                  >
-                    {item.effort}
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div>
-
-                <h4 className="font-bold text-lg">
-                  💡 Why this matters
-                </h4>
-
-                <p className="text-gray-600 leading-7 mt-3">
-                  {item.reason}
+                <p className="text-gray-700 leading-8">
+                  {item.experiment}
                 </p>
 
-              </div>
+              </motion.div>
 
             </div>
 
-            {/* Experiment */}
-
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mt-8">
-
-              <h4 className="font-bold text-blue-700">
-                🧪 Recommended Experiment
-              </h4>
-
-              <p className="mt-3 text-gray-700 leading-7">
-                {item.experiment}
-              </p>
-
-            </div>
-
-          </div>
+          </motion.div>
 
         ))}
 
       </div>
 
     </div>
-
   );
-
 }
 
 export default AuditCard;

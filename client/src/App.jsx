@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 import Header from "./components/Header";
 import Hero from "./components/Hero";
@@ -26,15 +27,23 @@ function App() {
       {/* Header */}
       <Header />
 
-      {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-6 pt-8">
+      {/* Hero */}
+      <motion.div
+        className="max-w-7xl mx-auto px-6 pt-8"
+        initial={{ opacity: 0, y: -40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <Hero />
-      </div>
+      </motion.div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-6 py-8">
-
-        {/* URL Form */}
+      <motion.div
+        className="max-w-6xl mx-auto px-6 py-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
+      >
         <URLForm
           setWebsiteData={setWebsiteData}
           websiteData={websiteData}
@@ -49,28 +58,32 @@ function App() {
         {/* Empty State */}
         {!loading && !websiteData && <EmptyState />}
 
-        {/* Hidden PDF Generator */}
-        <DownloadPDF />
+        {/* PDF Generator */}
+        <DownloadPDF websiteData={websiteData} />
 
-        {/* Analysis Report */}
+        {/* Report */}
         {websiteData && websiteData.audit && (
-          <div
+          <motion.div
             id="report"
-            className="space-y-8 mt-10 animate-fade-in"
+            className="space-y-8 mt-10"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
           >
             <ScoreCards audit={websiteData.audit} />
 
-            <WebsiteInfo data={websiteData.website || websiteData} />
+            <WebsiteInfo data={websiteData.website} />
 
             <ComparisonCard audit={websiteData.audit} />
 
             <AuditCard audit={websiteData.audit} />
-          </div>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
 
       {/* Footer */}
       <Footer />
+
     </div>
   );
 }

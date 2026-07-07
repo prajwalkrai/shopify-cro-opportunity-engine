@@ -1,105 +1,147 @@
+import {
+  Globe,
+  Heading,
+  FileText,
+  Image,
+  MousePointerClick,
+} from "lucide-react";
+
 function WebsiteInfo({ data }) {
-  if (!data || !data.website) return null;
+  if (!data) return null;
 
-  const website = data.website;
-
+  const website = data;
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-8 mt-8">
+    <div className="mt-8 bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
 
-      <h2 className="text-3xl font-bold mb-8">
-        🌐 Website Information
-      </h2>
+      {/* Header */}
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6">
 
-        <div className="border rounded-xl p-5 bg-slate-50">
-          <p className="text-gray-500 font-semibold mb-2">
-            Store Title
-          </p>
+        <div className="flex items-center gap-3">
 
-          <p className="text-lg font-semibold text-slate-800">
+          <Globe size={32} />
+
+          <h2 className="text-3xl font-bold">
+            Website Overview
+          </h2>
+
+        </div>
+
+        <p className="text-indigo-100 mt-2">
+          Basic information extracted from the Shopify store.
+        </p>
+
+      </div>
+
+      {/* Content */}
+
+      <div className="grid md:grid-cols-2 gap-6 p-8">
+
+        {/* Title */}
+
+        <div className="bg-slate-50 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+
+          <div className="flex items-center gap-3 mb-3">
+
+            <FileText
+              size={22}
+              className="text-blue-600"
+            />
+
+            <p className="text-gray-500 uppercase font-semibold">
+              Website Title
+            </p>
+
+          </div>
+
+          <p className="text-xl font-bold text-gray-800">
             {website.title || "Not Found"}
           </p>
+
         </div>
 
-        <div className="border rounded-xl p-5 bg-slate-50">
-          <p className="text-gray-500 font-semibold mb-2">
-            Main Heading
-          </p>
+        {/* H1 */}
 
-          <p className="text-lg font-semibold text-slate-800">
+        <div className="bg-slate-50 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+
+          <div className="flex items-center gap-3 mb-3">
+
+            <Heading
+              size={22}
+              className="text-indigo-600"
+            />
+
+            <p className="text-gray-500 uppercase font-semibold">
+              Main Heading
+            </p>
+
+          </div>
+
+          <p className="text-xl font-bold text-gray-800">
             {website.h1 || "Not Found"}
           </p>
+
+        </div>
+
+        {/* Description */}
+
+        <div className="md:col-span-2 bg-slate-50 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+
+          <div className="flex items-center gap-3 mb-3">
+
+            <FileText
+              size={22}
+              className="text-green-600"
+            />
+
+            <p className="text-gray-500 uppercase font-semibold">
+              Meta Description
+            </p>
+
+          </div>
+
+          <p className="text-gray-700 leading-8">
+            {website.description || "No description available."}
+          </p>
+
         </div>
 
       </div>
 
-      <div className="border rounded-xl p-5 bg-slate-50 mt-6">
+      {/* Statistics */}
 
-        <p className="text-gray-500 font-semibold mb-2">
-          Description
-        </p>
+      <div className="grid md:grid-cols-2 gap-6 bg-slate-100 p-8">
 
-        <p className="text-slate-700 leading-7">
-          {website.description || "Not Available"}
-        </p>
+        <div className="bg-white rounded-2xl p-6 shadow hover:shadow-lg transition text-center">
 
-      </div>
+          <Image
+            size={44}
+            className="mx-auto text-blue-600 mb-4"
+          />
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-8">
+          <h3 className="text-gray-500 font-semibold">
+            Total Images
+          </h3>
 
-        <div className="bg-blue-50 rounded-xl p-5 text-center">
-
-          <div className="text-3xl mb-2">🖼️</div>
-
-          <p className="text-sm text-gray-500">
-            Images
-          </p>
-
-          <p className="text-3xl font-bold text-blue-600">
-            {website.totalImages}
+          <p className="text-4xl font-bold text-blue-600 mt-3">
+            {website.totalImages ?? 0}
           </p>
 
         </div>
 
-        <div className="bg-green-50 rounded-xl p-5 text-center">
+        <div className="bg-white rounded-2xl p-6 shadow hover:shadow-lg transition text-center">
 
-          <div className="text-3xl mb-2">🔘</div>
+          <MousePointerClick
+            size={44}
+            className="mx-auto text-purple-600 mb-4"
+          />
 
-          <p className="text-sm text-gray-500">
-            Buttons
-          </p>
+          <h3 className="text-gray-500 font-semibold">
+            Total Buttons
+          </h3>
 
-          <p className="text-3xl font-bold text-green-600">
-            {website.totalButtons}
-          </p>
-
-        </div>
-
-        <div className="bg-yellow-50 rounded-xl p-5 text-center">
-
-          <div className="text-3xl mb-2">📄</div>
-
-          <p className="text-sm text-gray-500">
-            Description Length
-          </p>
-
-          <p className="text-3xl font-bold text-yellow-600">
-            {website.description?.length || 0}
-          </p>
-
-        </div>
-
-        <div className="bg-purple-50 rounded-xl p-5 text-center">
-
-          <div className="text-3xl mb-2">🏷️</div>
-
-          <p className="text-sm text-gray-500">
-            Title Length
-          </p>
-
-          <p className="text-3xl font-bold text-purple-600">
-            {website.title?.length || 0}
+          <p className="text-4xl font-bold text-purple-600 mt-3">
+            {website.totalButtons ?? 0}
           </p>
 
         </div>
